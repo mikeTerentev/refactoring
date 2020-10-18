@@ -1,5 +1,6 @@
 package ru.akirakozov.sd.refactoring.servlet;
 
+import ru.akirakozov.sd.refactoring.commands.SqlCommandsImpl;
 import ru.akirakozov.sd.refactoring.response.ResponseBuilder;
 
 import javax.servlet.http.HttpServlet;
@@ -10,6 +11,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
+import static ru.akirakozov.sd.refactoring.commands.SqlCommandsImpl.CommandsNames.*;
 
 /**
  * @author akirakozov
@@ -23,7 +26,7 @@ public class QueryServlet extends HttpServlet {
             try {
                 try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
                     Statement stmt = c.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM PRODUCT ORDER BY PRICE DESC LIMIT 1");
+                    ResultSet rs = stmt.executeQuery(SqlCommandsImpl.getSQLTemplate(PRODUCT_MAX_PRICE));
                     responseBuilder.addBlock("<h1>Product with max price: </h1>");
 
                     while (rs.next()) {
@@ -43,7 +46,7 @@ public class QueryServlet extends HttpServlet {
             try {
                 try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
                     Statement stmt = c.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM PRODUCT ORDER BY PRICE LIMIT 1");
+                    ResultSet rs = stmt.executeQuery(SqlCommandsImpl.getSQLTemplate(PRODUCT_MIN_PRICE));
 
                     responseBuilder.addBlock("<h1>Product with min price: </h1>");
 
@@ -64,7 +67,7 @@ public class QueryServlet extends HttpServlet {
             try {
                 try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
                     Statement stmt = c.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT SUM(price) FROM PRODUCT");
+                    ResultSet rs = stmt.executeQuery(SqlCommandsImpl.getSQLTemplate(PRODUCT_SUM));
 
                     responseBuilder.addBlock("Summary price: ");
 
@@ -83,7 +86,7 @@ public class QueryServlet extends HttpServlet {
             try {
                 try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
                     Statement stmt = c.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM PRODUCT");
+                    ResultSet rs = stmt.executeQuery(SqlCommandsImpl.getSQLTemplate(PRODUCT_COUNT));
 
                     responseBuilder.addBlock("Number of products: ");
 

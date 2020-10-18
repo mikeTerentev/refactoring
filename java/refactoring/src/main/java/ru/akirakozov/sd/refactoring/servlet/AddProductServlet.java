@@ -1,5 +1,6 @@
 package ru.akirakozov.sd.refactoring.servlet;
 
+import ru.akirakozov.sd.refactoring.commands.SqlCommandsImpl;
 import ru.akirakozov.sd.refactoring.response.ResponseBuilder;
 
 import javax.servlet.http.HttpServlet;
@@ -24,7 +25,7 @@ public class AddProductServlet extends HttpServlet {
 
         try {
             try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
-                String sql = "INSERT INTO PRODUCT " + "(NAME, PRICE) VALUES (\"" + name + "\"," + price + ")";
+                String sql = SqlCommandsImpl.getSQLTemplate(SqlCommandsImpl.CommandsNames.INSERT_PRODUCT);
                 Statement stmt = c.createStatement();
                 stmt.executeUpdate(sql);
                 stmt.close();

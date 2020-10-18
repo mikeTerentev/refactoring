@@ -1,6 +1,5 @@
 package ru.akirakozov.sd.refactoring.servlet;
 
-import ru.akirakozov.sd.refactoring.commands.SqlCommands;
 import ru.akirakozov.sd.refactoring.commands.SqlCommandsImpl;
 import ru.akirakozov.sd.refactoring.response.ResponseBuilder;
 
@@ -13,6 +12,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import static ru.akirakozov.sd.refactoring.commands.SqlCommandsImpl.CommandsNames.SELECT_ALL;
+
 /**
  * @author akirakozov
  */
@@ -24,7 +25,7 @@ public class GetProductsServlet extends HttpServlet {
         try {
             try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
                 Statement stmt = c.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM PRODUCT");
+                ResultSet rs = stmt.executeQuery(SqlCommandsImpl.getSQLTemplate(SELECT_ALL));
                 while (rs.next()) {
                     String name = rs.getString("name");
                     int price = rs.getInt("price");
