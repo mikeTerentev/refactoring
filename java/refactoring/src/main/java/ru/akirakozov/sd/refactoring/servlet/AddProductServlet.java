@@ -1,6 +1,7 @@
 package ru.akirakozov.sd.refactoring.servlet;
 
-import ru.akirakozov.sd.refactoring.commands.SqlCommandsImpl;
+import ru.akirakozov.sd.refactoring.commands.SqlCommands;
+import ru.akirakozov.sd.refactoring.dao.ProductsDao;
 import ru.akirakozov.sd.refactoring.response.ResponseBuilder;
 
 import javax.servlet.http.HttpServlet;
@@ -23,16 +24,7 @@ public class AddProductServlet extends HttpServlet {
 
         ResponseBuilder responseBuilder = new ResponseBuilder(response);
 
-        try {
-            try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
-                String sql = SqlCommandsImpl.getSQLTemplate(SqlCommandsImpl.CommandsNames.INSERT_PRODUCT);
-                Statement stmt = c.createStatement();
-                stmt.executeUpdate(sql);
-                stmt.close();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        ProductsDao.addProduct(name, price);
 
         responseBuilder.addBlock("OK");
         responseBuilder.build();
