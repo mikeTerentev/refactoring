@@ -15,10 +15,16 @@ import java.util.List;
  */
 public class GetProductsServlet extends HttpServlet {
 
+    private final ProductsDao dao;
+
+    public GetProductsServlet(ProductsDao dao) {
+        this.dao = dao;
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         ResponseBuilder responseBuilder = new ResponseBuilder(response);
-        List<Product> products = ProductsDao.getAllProducts();
+        List<Product> products = dao.getAllProducts();
         products.forEach(product -> responseBuilder.addBlock(product.getName() + "\t" + product.getPrice() + "</br>"));
         responseBuilder.build();
     }

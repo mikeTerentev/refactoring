@@ -17,14 +17,20 @@ import java.sql.Statement;
  */
 public class AddProductServlet extends HttpServlet {
 
+    private final ProductsDao dao;
+
+    public AddProductServlet(ProductsDao dao) {
+        this.dao = dao;
+    }
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String name = request.getParameter("name");
         long price = Long.parseLong(request.getParameter("price"));
 
         ResponseBuilder responseBuilder = new ResponseBuilder(response);
 
-        ProductsDao.addProduct(name, price);
+        dao.addProduct(name, price);
 
         responseBuilder.addBlock("OK");
         responseBuilder.build();
